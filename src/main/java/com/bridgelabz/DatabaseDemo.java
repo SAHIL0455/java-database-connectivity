@@ -1,8 +1,6 @@
 package com.bridgelabz;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DatabaseDemo {
     public static void main(String[] args) throws SQLException {
@@ -14,12 +12,18 @@ public class DatabaseDemo {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             System.out.println("Driver is Loaded");
-            connection = DriverManager.getConnection(jdbcURL,name,password);
+            connection = DriverManager.getConnection(jdbcURL, name, password);
             System.out.println("connection is successfully");
-        }catch (Exception e){
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from payroll_service.employee_payroll");
+            System.out.println("Retrive the Employee Payroll");
+            while (resultSet.next()) {
+                System.out.println(resultSet.getInt("id") + " " + resultSet.getString("name")
+                        + " " + resultSet.getString("start"));
+            }
+        } catch (Exception e) {
             System.out.println(e.getMessage());
-        }
-        finally {
+        } finally {
             connection.close();
         }
     }
